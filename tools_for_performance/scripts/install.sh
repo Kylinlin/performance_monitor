@@ -17,6 +17,14 @@ COLLECTD_CONF=/etc/collectd.conf
 INFLUXDC_CONF=/opt/influxdb/shared/config.toml
 
 
+rpm -ivh $INFLUXDB_NAME
+rpm -e collectd-5.5.0-2.el7.x86_64
+rpm -e grafana-2.0.2-1.x86_64
+
+systemctl stop collectd.service
+pkill influxdb
+pkill grafana-serve 
+
 echo "Setting timezone"
 timedatectl set-timezone Asia/Shanghai
 /usr/sbin/ntpdate time.nist.gov
