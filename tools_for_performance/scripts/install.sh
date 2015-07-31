@@ -9,7 +9,7 @@
 
 TOOLS_LOCATION=/tmp
 TOOLS_NAME=tools_for_performance
-ARCHIVE_LOCATION=TOOLS_LOCATION/TOOLS_NAME/tools
+ARCHIVE_LOCATION=$TOOLS_LOCATION/$TOOLS_NAME/tools
 
 INFLUXDB_NAME=influxdb-0.8.8-1.x86_64.rpm
 EPEL_NAME=epel-release-7-5.noarch.rpm
@@ -17,10 +17,12 @@ COLLECTD_CONF=/etc/collectd.conf
 INFLUXDC_CONF=/opt/influxdb/shared/config.toml
 
 
+echo "Setting timezone"
+timedatectl set-timezone Asia/Shanghai
+/usr/sbin/ntpdate time.nist.gov
+
 echo "Stop firewalld"
 systemctl stop firewalld.service
-
-
 
 
 echo "Install influxdb"
