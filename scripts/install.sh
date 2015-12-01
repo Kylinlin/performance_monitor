@@ -30,12 +30,13 @@ function Install_Influxdb {
 	
 	echo "Install influxdb"
 	cd ../packages
-	rpm -ivh $INFLUXDB
+	rpm -ivh $INFLUXDB > /dev/null
 
 	firewall-cmd --permanent --add-port=8083/tcp
 	firewall-cmd --permanent --add-port=8086/tcp
 	firewall-cmd --permanent --add-port=8090/tcp
 	firewall-cmd --permanent --add-port=8099/tcp
+	firewall-cmd --reload
 
 
 	echo "Begin influxdb"
@@ -45,8 +46,8 @@ function Install_Influxdb {
 function Install_Collectd {
 	
 	echo "Install collectd"
-	rpm -ivh $EPEL_NAME
-	yum install collectd -y
+	rpm -ivh $EPEL_NAME > /dev/null
+	yum install collectd -y > /dev/null
 
 	echo "Configure collectd"
 	cp $COLLECTD_CONF $COLLECTD_CONF.abk
@@ -76,19 +77,24 @@ function Install_Collectd {
 function Install_Grafana {
 	
 	echo "Install grafana"
-	yum install initscripts fontconfig -y
+	yum install initscripts fontconfig -y > /dev/null
 
-	rpm -ivh $GRAFANA
+	rpm -ivh $GRAFANA > /dev/null
 	firewall-cmd --permanent --add-port=3000/tcp
+	firewall-cmd --reload
 	systemctl daemon-reload
 	systemctl start grafana-server
 }
 
 Prepare_Envrionment
 Install_Influxdb
-echo "Create the databse whose name is collectd on the website"
-read -p "Finished? [y/n]: " CHOICE
-if [ $CHOICE == 'y' || $CHOICE == "yes" ]; then
-	Install_Collectd
-	Install_Grafana
-fi 
+
+while true; do
+	echo -e "\e[1;33mCreate the databse whose name is collectd on the website\e[0m"
+	read -p "Finished? [y/n]: " CHOICE
+	if [ $CHOICE == 'y' ] || [ $CHOICE == "yes" ] ; then
+		Install_Collectd
+		Install_Grafana
+		break
+	fi 
+done
