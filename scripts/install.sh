@@ -17,17 +17,17 @@ INFLUXDC_CONF=/opt/influxdb/shared/config.toml
 
 
 function Prepare_Envrionment {
-	
+
 	echo "Setting timezone"
 	timedatectl set-timezone Asia/Shanghai
 	/usr/sbin/ntpdate time.nist.gov
 
-	echo "Stop firewalld"
+	#echo "Stop firewalld"
 	#systemctl stop firewalld.service
 }
 
 function Install_Influxdb {
-	
+
 	echo "Install influxdb"
 	cd ../packages
 	rpm -ivh $INFLUXDB > /dev/null
@@ -44,7 +44,7 @@ function Install_Influxdb {
 }
 
 function Install_Collectd {
-	
+
 	echo "Install collectd"
 	rpm -ivh $EPEL_NAME > /dev/null
 	yum install collectd -y > /dev/null
@@ -75,7 +75,7 @@ function Install_Collectd {
 }
 
 function Install_Grafana {
-	
+
 	echo "Install grafana"
 	yum install initscripts fontconfig -y > /dev/null
 
@@ -92,9 +92,9 @@ Install_Influxdb
 while true; do
 	echo -e "\e[1;33mCreate the databse whose name is collectd on the website\e[0m"
 	read -p "Finished? [y/n]: " CHOICE
-	if [ $CHOICE == 'y' ] || [ $CHOICE == "yes" ] ; then
+	if [ $CHOICE == 'y' ] ; then
 		Install_Collectd
 		Install_Grafana
 		break;
-	fi 
+	fi
 done
