@@ -95,6 +95,6 @@ while true; do
 	if [ $CHOICE == 'y' ] || [ $CHOICE == "yes" ] ; then
 		Install_Collectd
 		Install_Grafana
-		break
+		break;
 	fi 
 done
